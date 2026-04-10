@@ -44,9 +44,10 @@ cp .env.local.example .env.local
 │   ├── compile/                #   Skill 编译
 │   └── skill-creator/          #   评估工具（第三方）
 │
-├── research/                   # 研究过程（参考）
-│   ├── plans/                  #   构建计划 & 产出物
-│   └── reports/                #   早期测试报告
+├── commands/                   # Plan 1–5 产出物（参考文档，见下文）
+│   ├── README.md               #   产出物说明与依赖关系
+│   ├── 01-skeleton.md … 05-validation-report.md
+│   └── …
 │
 ├── .env.local.example          # 凭证模板
 ├── .gitignore
@@ -57,13 +58,40 @@ cp .env.local.example .env.local
 
 ---
 
+## `commands/` 产出物（参考文档）
+
+以下文件是 Plan 1–5 的**产出物（参考文档）**，不是可执行的 skills。可执行的 skills 在仓库根目录 `skills/` 下：`prepare/`（从 API + 用户访谈中提取知识，生成知识文档）、`compile/`（从知识文档编译生成环境特定的 SKILL.md）。
+
+### 文件清单（按依赖顺序）
+
+| 序号 | 文件 | 来源 | 用途 |
+|------|------|------|------|
+| 01 | `commands/01-skeleton.md` | Plan 1 | 通用 Skill 骨架 — 定义 SKILL.md 的 10 个标准章节及其分类（U/D/E/T） |
+| 02 | `commands/02-knowledge-doc-spec.md` | Plan 2 | 知识文档格式规范 — 定义 Prepare 命令输出 / Compile 命令输入的标准格式 |
+| 03 | `commands/03-knowledge-doc-example-metric-query.md` | Plan 2 | 知识文档示例 — 指标查询领域（由当时手写 SKILL 整理） |
+| 04 | `commands/04-generated-skill.md` | Plan 5 | 编译产出 — 模拟 Compile 命令从 03 生成的 SKILL.md（Cursor 环境） |
+| 05 | `commands/05-validation-report.md` | Plan 5 | 验证报告 — 04 与基准手写 SKILL 的逐章节对比、覆盖度评分、改进清单 |
+
+### 依赖关系
+
+```
+01-skeleton ──→ compile-skill（骨架模板）
+02-knowledge-doc-spec ──→ prepare-skill（输出格式）+ compile-skill（输入格式）
+03-knowledge-doc-example ──→ 04-generated-skill（编译输入）
+04-generated-skill ──→ 05-validation-report（端到端验证结论；基准为当时手写 SKILL，见报告内文）
+```
+
+更细的说明见 [`commands/README.md`](commands/README.md)。
+
+---
+
 ## 核心概念
 
 ### 知识文档（Knowledge Document）
 
 Prepare 和 Compile 之间的中间产物。以 Markdown 存储某个领域的全部业务规则和 API 用法，与运行环境无关。
 
-格式规范见 `research/plans/outputs/02-knowledge-doc-spec.md`。
+格式规范见 `commands/02-knowledge-doc-spec.md`。
 
 ### 环境适配器（Environment Adapter）
 
@@ -88,7 +116,7 @@ CAN_API_KEY=your-api-key-here
 
 ## 已知限制
 
-来自端到端验证（`research/plans/outputs/05-validation-report.md`）：
+来自端到端验证（`commands/05-validation-report.md`）：
 
 | 问题 | 状态 |
 |------|------|
